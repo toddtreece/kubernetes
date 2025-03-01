@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug kube-apiserver",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/kube-apiserver/apiserver.go",
+            "preLaunchTask": "prepare-environment",
+            "postDebugTask": "cleanup-etcd",
+            "args": [
+                "--authorization-mode=Node,RBAC",
+                "--service-cluster-ip-range=10.0.0.0/24",
+                "--service-account-key-file=${workspaceFolder}/.vscode/dev-certs/sa.pub",
+                "--service-account-signing-key-file=${workspaceFolder}/.vscode/dev-certs/sa.key",
+                "--service-account-issuer=https://kubernetes.default.svc.cluster.local",
+                "--client-ca-file=${workspaceFolder}/.vscode/dev-certs/ca.crt",
+                "--tls-cert-file=${workspaceFolder}/.vscode/dev-certs/apiserver.crt",
+                "--tls-private-key-file=${workspaceFolder}/.vscode/dev-certs/apiserver.key",
+                "--etcd-servers=http://localhost:2379",
+                "--secure-port=6443",
+                "--allow-privileged=true",
+                "--v=4"
+            ],
+            "env": {
+                "KUBECONFIG": "${workspaceFolder}/.vscode/dev-kubeconfig"
+            }
+        }
+    ]
+} 

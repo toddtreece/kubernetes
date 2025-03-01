@@ -1,0 +1,45 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "generate-certificates",
+            "type": "shell",
+            "command": "${workspaceFolder}/.vscode/generate-certs.sh",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "start-etcd",
+            "type": "shell",
+            "command": "docker ps | grep -q etcd-for-k8s || docker run -d --name etcd-for-k8s -p 2379:2379 quay.io/coreos/etcd:v3.5.0 etcd --advertise-client-urls http://0.0.0.0:2379 --listen-client-urls http://0.0.0.0:2379",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "prepare-environment",
+            "dependsOn": ["start-etcd", "generate-certificates"],
+            "dependsOrder": "sequence",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "cleanup-etcd",
+            "type": "shell",
+            "command": "docker stop etcd-for-k8s && docker rm etcd-for-k8s || echo 'No etcd container to clean up'",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        }
+    ]
+} 
